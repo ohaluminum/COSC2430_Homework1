@@ -5,8 +5,86 @@
 #include "ArgumentManager.h"
 using namespace std;
 
-//write a function!!
-//To read number of matrix
+//Write a function to decode the matrix
+//Reference: https://www.educative.io/edpresso/spiral-matrix-algorithm
+string spiralMatrixDecode(int row, int col, char** arr)
+{
+    //Defining the boundaries of the matrix.
+    int top = 0;
+    int bottom = row - 1;
+    int left = 0;
+    int right = col - 1;
+    string decodedMatrix = "";
+
+    //Defining the direction in which the array is to be traversed.
+    //1: left -> right
+    //2: top -> bottom
+    //3: right -> left
+    //4: bottom -> top
+
+    //Initial the direction: left -> right
+    int dir = 1;
+
+    while (top <= bottom && left <= right)
+    {
+        //Moving left -> right
+        if (dir == 1)
+        {
+            for (int i = left; i <= right; i++)
+            {
+                decodedMatrix += arr[top][i];
+            }
+
+            //We have traversed the whole first row 
+            //Move down to the next row
+            top++;
+            dir = 2;
+        }
+
+        //Moving top -> bottom
+        else if (dir == 2)
+        {
+            for (int i = top; i <= bottom; i++)
+            {
+                decodedMatrix += arr[i][right];
+            }
+
+            //We have traversed the whole last column
+            //Move left to the previous column.
+            right--;
+            dir = 3;
+        }
+
+        //Moving right -> left
+        else if (dir == 3)
+        {
+            for (int i = right; i >= left; i--)
+            {
+                decodedMatrix += arr[bottom][i];
+            }
+
+            //We have traversed the whole last row
+            //Move up to the previous row
+            bottom--;
+            dir = 4;
+        }
+
+        //Moving bottom -> up
+        else if (dir == 4)
+        {
+            for (int i = bottom; i >= top; i--)
+            {
+                decodedMatrix += arr[i][left];
+            }
+
+            //We have traversed the whole first col
+            //Move right to the next column
+            left++;
+            dir = 1;
+        }
+    }
+    return decodedMatrix;
+}
 
 int main(int argc, char* argv[])
 {
@@ -75,8 +153,11 @@ int main(int argc, char* argv[])
             }
         }
 
-        //Decode metrix to string
-
+        string decodedMatrix;
+        //Call function to decode metrix to string
+            
+        decodedMatrix = spiralMatrixDecode(row, col, matrix);
+        cout << decodedMatrix;
 
 
     }
