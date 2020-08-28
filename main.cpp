@@ -1,8 +1,12 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include "ArgumentManager.h"
 using namespace std;
+
+//write a function!!
+//To read number of matrix
 
 int main(int argc, char* argv[])
 {
@@ -13,7 +17,7 @@ int main(int argc, char* argv[])
     //string output = am.get("output");
 
     //Test
-    string input = "input11.txt";
+    string input = "input.txt";
     string output = "output11.txt";
 
     ifstream inFS(input);
@@ -22,13 +26,59 @@ int main(int argc, char* argv[])
     //Check if the input file is open
     if (!inFS.is_open())
     {
+        cout << "Could not open input file." << endl;
         return 1;
     }
 
+    istringstream inSS;
+    string line;
     string label;
-    inFS >> label;
+    string row_str;
+    string col_str;
+    int row = 0;
+    int col = 0;
+    string delimiter;
 
-    cout << label;
+    while (getline(inFS, line))
+    {
+        //Read matrix label 
+        label = line;
+
+        //Read matrix dimension
+        getline(inFS, line);
+        inSS.clear();
+        inSS.str(line);
+
+        //Function: getline(istream& iuputStream, string& str, char delimiter)
+        //getline(inFS, row_str, ',');
+
+        getline(inSS, row_str, ',');
+        getline(inSS, col_str, ',');
+
+        row = stoi(row_str);
+        col = stoi(col_str);
+
+        if ((row < 0) || (row > 9) || (col < 0) || (col > 9))
+        {
+            cout << "The dimenstion of matrix is not bigger than 9 * 9." << endl;
+            return 1;
+        }
+
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < col; j++)
+            {
+
+
+            }
+        }
+
+
+
+    }
+
+
+    cout << row << col;
 
         
 

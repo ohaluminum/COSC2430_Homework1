@@ -33,6 +33,9 @@
     <Text Include="input13.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="input.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="hw1.pdf">

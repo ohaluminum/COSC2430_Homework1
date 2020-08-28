@@ -156,6 +156,7 @@
     <Text Include="input11.txt" />
     <Text Include="input12.txt" />
     <Text Include="input13.txt" />
+    <Text Include="input.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="hw1.pdf" />
