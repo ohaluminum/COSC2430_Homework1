@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
     int row = 0;
     int col = 0;
     string delimiter;
+    string eachChar;
 
     while (getline(inFS, line))
     {
@@ -45,40 +46,42 @@ int main(int argc, char* argv[])
         label = line;
 
         //Read matrix dimension
-        getline(inFS, line);
-        inSS.clear();
-        inSS.str(line);
-
         //Function: getline(istream& iuputStream, string& str, char delimiter)
-        //getline(inFS, row_str, ',');
-
-        getline(inSS, row_str, ',');
-        getline(inSS, col_str, ',');
+        getline(inFS, row_str, ',');
+        getline(inFS, col_str);
 
         row = stoi(row_str);
         col = stoi(col_str);
-
+        
         if ((row < 0) || (row > 9) || (col < 0) || (col > 9))
         {
             cout << "The dimenstion of matrix is not bigger than 9 * 9." << endl;
             return 1;
         }
 
+        //Create the 2D dynamic array to store metrix
+        char** matrix = new char*[row];
+        for (int i = 0; i < row; i++)
+        {
+            matrix[i] = new char[col];
+        }
+
+        //Read metrix from file
         for (int i = 0; i < row; i++)
         {
             for (int j = 0; j < col; j++)
-            {
-
-
+            {                     
+                inFS >> matrix[i][j];
             }
         }
+
+        //Decode metrix to string
 
 
 
     }
 
 
-    cout << row << col;
 
         
 
