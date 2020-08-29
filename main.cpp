@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
     //string output = am.get("output");
 
     //Test
-    string input = "input11.txt";
+    string input = "input13.txt";
     string output = "output11.txt";
 
     ifstream inFS;
@@ -129,6 +129,7 @@ int main(int argc, char* argv[])
     //Check if the input file is open
     if (!inFS.is_open())
     {
+        cout << "Could not open input file." << endl;
         return 1;
     }
 
@@ -144,6 +145,7 @@ int main(int argc, char* argv[])
     //Check if the input file is open
     if (!inFS.is_open())
     {
+        cout << "Could not open input file." << endl;
         return 1;
     }
 
@@ -155,22 +157,18 @@ int main(int argc, char* argv[])
     int col = 0;
 
     //Declare a pointer array to store string-pointer
-    const int elementPerMatrix = 2;
-
     string** matrixList = new string*[numOfMatrix];
     for (int i = 0; i < numOfMatrix; i++)
     {
-        matrixList[i] = new string[elementPerMatrix];
+        matrixList[i] = new string[2];
     }
 
     for (int i = 0; i < numOfMatrix; i++)
     {
         //Read matrix label
-        getline(inFS, line);
+        inFS >> line;
         label = line;
         matrixList[i][0] = label;
-
-        std::cout << label << endl;
 
         //Read matrix dimension
         //Function: getline(istream& iuputStream, string& str, char delimiter)
@@ -179,12 +177,10 @@ int main(int argc, char* argv[])
 
         row = stoi(row_str);
         col = stoi(col_str);
-
-                                            std::cout << row << col << endl;
         
         if ((row < 0) || (row > 9) || (col < 0) || (col > 9))
         {
-            std::cout << "The dimenstion of matrix is not bigger than 9 * 9." << endl;
+            cout << "The dimenstion of matrix is not bigger than 9 * 9." << endl;
             return 1;
         }
 
@@ -208,14 +204,13 @@ int main(int argc, char* argv[])
 
         //Call function to decode metrix to string    
         decodedMatrix = spiralMatrixDecode(row, col, matrix);
-                                                 std::cout << decodedMatrix;
 
         matrixList[i][1] = decodedMatrix;
-
     }
     
     inFS.close();
 
+    //It works! 
     for (int i = 0; i < numOfMatrix; i++)
     {
         for (int j = 0; j < 2; j++)
