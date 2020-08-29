@@ -5,84 +5,70 @@
 using namespace std;
 
 //Write a function to decode the matrix
-//Reference: https://www.educative.io/edpresso/spiral-matrix-algorithm
-string spiralMatrixDecode(int row, int col, char** arr)
+void spiralMatrixDecode(char** arr, int top, int bottom, int left, int right, string& decodedMatrix)
 {
-    //Defining the boundaries of the matrix.
-    int top = 0;
-    int bottom = row - 1;
-    int left = 0;
-    int right = col - 1;
-    string decodedMatrix = "";
-
-    //Defining the direction in which the array is to be traversed.
-    //1: left -> right
-    //2: top -> bottom
-    //3: right -> left
-    //4: bottom -> top
-
-    //Initial the direction: left -> right
-    int dir = 1;
-
-    while (top <= bottom && left <= right)
+    //1.Top row: moving left -> right
+    if ((left > right) || (top > bottom))
     {
-        //Moving left -> right
-        if (dir == 1)
-        {
-            for (int i = left; i <= right; i++)
-            {
-                decodedMatrix += arr[top][i];
-            }
-
-            //We have traversed the whole first row 
-            //Move down to the next row
-            top++;
-            dir = 2;
-        }
-
-        //Moving top -> bottom
-        else if (dir == 2)
-        {
-            for (int i = top; i <= bottom; i++)
-            {
-                decodedMatrix += arr[i][right];
-            }
-
-            //We have traversed the whole last column
-            //Move left to the previous column.
-            right--;
-            dir = 3;
-        }
-
-        //Moving right -> left
-        else if (dir == 3)
-        {
-            for (int i = right; i >= left; i--)
-            {
-                decodedMatrix += arr[bottom][i];
-            }
-
-            //We have traversed the whole last row
-            //Move up to the previous row
-            bottom--;
-            dir = 4;
-        }
-
-        //Moving bottom -> up
-        else if (dir == 4)
-        {
-            for (int i = bottom; i >= top; i--)
-            {
-                decodedMatrix += arr[i][left];
-            }
-
-            //We have traversed the whole first col
-            //Move right to the next column
-            left++;
-            dir = 1;
-        }
+        return;
     }
-    return decodedMatrix;
+
+    for (int i = left; i <= right; i++)
+    {
+        decodedMatrix += arr[top][i];
+    }
+    
+    //We have traversed the whole first row
+    //Move down to the next row
+    top++;
+       
+    //2.Right column: moving top -> bottom
+    if ((left > right) || (top > bottom))
+    {
+        return;
+    }
+
+    for (int i = top; i <= bottom; i++)
+    {
+        decodedMatrix += arr[i][right];
+    }
+
+    //We have traversed the whole last column
+    //Move left to the previous column.
+    right--;
+
+    //3.Bottom row: moving right -> left
+    if ((left > right) || (top > bottom))
+    {
+        return;
+    }
+
+    for (int i = right; i >= left; i--)
+    {
+        decodedMatrix += arr[bottom][i];
+    }
+
+    //We have traversed the whole last row
+    //Move up to the previous row
+    bottom--;
+        
+    //4.Left column: moving bottom -> up
+    if ((left > right) || (top > bottom))
+    {
+        return;
+    }
+
+    for (int i = bottom; i >= top; i--)
+    {
+        decodedMatrix += arr[i][left];
+    }
+
+    //We have traversed the whole first col
+    //Move right to the next column
+    left++;
+
+    //Recursion: calling function itself
+    spiralMatrixDecode(arr, top, bottom, left, right, decodedMatrix);
 }
 
 int readNumOfMatrix(ifstream& inFS)
@@ -156,6 +142,13 @@ int main(int argc, char* argv[])
     int row = 0;
     int col = 0;
 
+    //Define matrix parameters
+    int top;
+    int bottom;
+    int left;
+    int right;
+    string decodedMatrix;
+
     //Declare a pointer array to store string-pointer
     string** matrixList = new string*[numOfMatrix];
     for (int i = 0; i < numOfMatrix; i++)
@@ -163,6 +156,7 @@ int main(int argc, char* argv[])
         matrixList[i] = new string[2];
     }
 
+    //Store all the matrix information to the array
     for (int i = 0; i < numOfMatrix; i++)
     {
         //Read matrix label
@@ -200,14 +194,28 @@ int main(int argc, char* argv[])
             }
         }
 
-        string decodedMatrix;
+        //Define matrix parameters
+        top = 0;
+        bottom = row - 1;
+        left = 0;
+        right = col - 1;
+        decodedMatrix = "";
 
         //Call function to decode metrix to string    
-        decodedMatrix = spiralMatrixDecode(row, col, matrix);
-
+        spiralMatrixDecode(matrix, top, bottom, left, right, decodedMatrix);
         matrixList[i][1] = decodedMatrix;
+
+        //Delete pointer
+        for (int i = 0; i < row; i++)
+        {
+            delete[] matrix[i];
+        }
+        delete[] matrix;
+
+        matrix = nullptr;
     }
     
+    //Close input file
     inFS.close();
 
     //It works! 
