@@ -86,6 +86,29 @@ string spiralMatrixDecode(int row, int col, char** arr)
     return decodedMatrix;
 }
 
+int readNumOfMatrix(ifstream& inFS)
+{
+    int counter = 0;
+    int size = 0;
+    string size_str;
+    string tempLine;
+
+    while (getline(inFS, tempLine))
+    {
+        getline(inFS, size_str, ',');
+        size = stoi(size_str);
+        getline(inFS, tempLine);
+
+        for (int i = 0; i < size; i++)
+        {
+            getline(inFS, tempLine);
+        }
+        counter++;
+    }
+    return counter;
+}
+
+
 int main(int argc, char* argv[])
 {
     ArgumentManager am(argc, argv);
@@ -98,8 +121,11 @@ int main(int argc, char* argv[])
     string input = "input.txt";
     string output = "output11.txt";
 
-    ifstream inFS(input);
-    ofstream outFS(output);
+    ifstream inFS;
+    ofstream outFS;
+
+    inFS.open(input);
+    outFS.open(output);
 
     //Check if the input file is open
     if (!inFS.is_open())
@@ -107,6 +133,24 @@ int main(int argc, char* argv[])
         cout << "Could not open input file." << endl;
         return 1;
     }
+
+    //Read number of matrix in the file
+    int numOfMatrix = readNumOfMatrix(inFS);
+
+    //Close input file (in order to re-open and read again)
+    inFS.close();
+
+    //Reopen the input file
+    inFS.open(input);
+
+    //Check if the input file is open
+    if (!inFS.is_open())
+    {
+        cout << "Could not open input file." << endl;
+        return 1;
+    }
+
+    cout << numOfMatrix;
 
     istringstream inSS;
     string line;
@@ -154,10 +198,16 @@ int main(int argc, char* argv[])
         }
 
         string decodedMatrix;
-        //Call function to decode metrix to string
-            
+
+        //Call function to decode metrix to string    
         decodedMatrix = spiralMatrixDecode(row, col, matrix);
         cout << decodedMatrix;
+
+        
+
+
+
+
 
 
     }
