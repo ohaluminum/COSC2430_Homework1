@@ -163,10 +163,12 @@ int main(int argc, char* argv[])
         matrixList[i] = new string[elementPerMatrix];
     }
 
-    for (int i = 0; i < numOfMatrix; i++)
+    int i = 0;
+    //for (int i = 0; i < numOfMatrix; i++)
+    while (getline(inFS, line))
     {
         //Read matrix label
-        getline(inFS, line);
+        
         label = line;
         matrixList[i][0] = label;
 
@@ -212,6 +214,7 @@ int main(int argc, char* argv[])
 
         matrixList[i][1] = decodedMatrix;
 
+        i++;
     }
     
     inFS.close();
