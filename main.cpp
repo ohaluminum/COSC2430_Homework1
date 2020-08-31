@@ -4,6 +4,29 @@
 #include "ArgumentManager.h"
 using namespace std;
 
+//Write a function to read number of matrix
+int readNumOfMatrix(ifstream& inFS)
+{
+    int counter = 0;
+    int size = 0;
+    string size_str;
+    string tempLine;
+
+    while (getline(inFS, tempLine))
+    {
+        getline(inFS, size_str, ',');
+        size = stoi(size_str);
+        getline(inFS, tempLine);
+
+        for (int i = 0; i < size; i++)
+        {
+            getline(inFS, tempLine);
+        }
+        counter++;
+    }
+    return counter;
+}
+
 //Write a function to decode the matrix
 void spiralMatrixDecode(char** arr, int top, int bottom, int left, int right, string& decodedMatrix)
 {
@@ -71,28 +94,33 @@ void spiralMatrixDecode(char** arr, int top, int bottom, int left, int right, st
     spiralMatrixDecode(arr, top, bottom, left, right, decodedMatrix);
 }
 
-int readNumOfMatrix(ifstream& inFS)
+//Write a function to output label in reverse
+void recursiveCall(string currentLabel, int order, string** matrixList, int numOfMatrix, ofstream& outFS)
 {
-    int counter = 0;
-    int size = 0;
-    string size_str;
-    string tempLine;
+    string newLabel;
 
-    while (getline(inFS, tempLine))
+    if (currentLabel != "finish")
     {
-        getline(inFS, size_str, ',');
-        size = stoi(size_str);
-        getline(inFS, tempLine);
+        newLabel = matrixList[order][1];
 
-        for (int i = 0; i < size; i++)
+        //Find new label location
+        for (int i = 0; i < numOfMatrix; i++)
         {
-            getline(inFS, tempLine);
+            if (newLabel == matrixList[i][0])
+            {
+                order = i;
+            }
         }
-        counter++;
-    }
-    return counter;
-}
 
+        recursiveCall(newLabel, order, matrixList, numOfMatrix, outFS);
+
+        outFS << currentLabel << endl;
+    }
+    else
+    {
+        return;
+    }
+}
 
 int main(int argc, char* argv[])
 {
@@ -104,7 +132,7 @@ int main(int argc, char* argv[])
 
     //Test
     string input = "input13.txt";
-    string output = "output11.txt";
+    string output = "output13.txt";
 
     ifstream inFS;
     ofstream outFS;
@@ -135,7 +163,6 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    string line;
     string label;
     string row_str;
     string col_str;
@@ -149,8 +176,9 @@ int main(int argc, char* argv[])
     int right;
     string decodedMatrix;
 
-    //Declare a pointer array to store string-pointer
+    //Declare two pointer array to store label and matrix
     string** matrixList = new string*[numOfMatrix];
+
     for (int i = 0; i < numOfMatrix; i++)
     {
         matrixList[i] = new string[2];
@@ -160,8 +188,7 @@ int main(int argc, char* argv[])
     for (int i = 0; i < numOfMatrix; i++)
     {
         //Read matrix label
-        inFS >> line;
-        label = line;
+        inFS >> label;
         matrixList[i][0] = label;
 
         //Read matrix dimension
@@ -218,21 +245,36 @@ int main(int argc, char* argv[])
     //Close input file
     inFS.close();
 
-    //It works! 
+    //Check if the output file is open
+    if (!outFS.is_open())
+    {
+        cout << "Could not open output file." << endl;
+        return 1;
+    }
+
+    string currentLabel = "start";
+    int order = 0;
+
     for (int i = 0; i < numOfMatrix; i++)
     {
-        for (int j = 0; j < 2; j++)
+        if (matrixList[i][0] == currentLabel)
         {
-            cout << matrixList[i][j] << endl;
+            order = i;
         }
     }
+
+    recursiveCall(currentLabel, order, matrixList, numOfMatrix, outFS);
+
+    outFS.close();
+
     return 0;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
 
-// Tips for Getting Started: 
+//Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+//Debug program: F5 or Debug > Start Debugging menu
+
+//Tips for Getting Started: 
 //   1. Use the Solution Explorer window to add/manage files
 //   2. Use the Team Explorer window to connect to source control
 //   3. Use the Output window to see build output and other messages
