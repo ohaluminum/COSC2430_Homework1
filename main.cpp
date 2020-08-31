@@ -127,12 +127,12 @@ int main(int argc, char* argv[])
     ArgumentManager am(argc, argv);
 
     //Get the filename of argument name "input" and "output"
-    //string input = am.get("input");
-    //string output = am.get("output");
+    string input = am.get("input");
+    string output = am.get("output");
 
     //Test
-    string input = "input13.txt";
-    string output = "output13.txt";
+    //string input = "input11.txt";
+    //string output = "output11.txt";
 
     ifstream inFS;
     ofstream outFS;
