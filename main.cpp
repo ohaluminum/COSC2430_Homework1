@@ -131,8 +131,8 @@ int main(int argc, char* argv[])
     string output = am.get("output");
 
     //Test
-    //string input = "input11.txt";
-    //string output = "output11.txt";
+    //string input = "input13.txt";
+    //string output = "output13.txt";
 
     ifstream inFS;
     ofstream outFS;
@@ -236,9 +236,10 @@ int main(int argc, char* argv[])
         for (int i = 0; i < row; i++)
         {
             delete[] matrix[i];
+            matrix[i] = nullptr;
         }
-        delete[] matrix;
 
+        delete[] matrix;
         matrix = nullptr;
     }
     
